@@ -1,22 +1,46 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import s from "../../pages/RegistrationPage/Registration.module.scss";
 import logo from "../../assets/img/martz-logo.png";
 import LoginIcon from "@mui/icons-material/Login";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form"
+import {useAppDispatch} from "../../redux/hooks";
+import {setUser} from "../../redux/Slices/userSlice";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
-interface IFormInput {
+export interface IRegisterFormInput {
     email: string
     password: string
-    confirm: string
+    confirm?: string
 }
 
 const RegisterForm = () => {
+    const [confirmInvalid, setConfirmInvalid] = useState(false)
+    const [confirmValue, setConfirmValue] = useState("")
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-    const {handleSubmit, register, formState: {errors, isValid}, reset} = useForm<IFormInput>({mode: "onBlur"})
+    const {
+        handleSubmit,
+        register,
+        formState: {errors, isValid},
+        reset,
+        watch
+    } = useForm<IRegisterFormInput>({mode: "onBlur"})
 
-    const onSubmit: SubmitHandler<IFormInput> = data => {
-        console.log(data)
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+
+
+    useEffect(() => {
+        if (watch("password") !== confirmValue) {
+            setConfirmInvalid(true)
+        } else setConfirmInvalid(false)
+    }, [confirmValue])
+
+    const onSubmit: SubmitHandler<IRegisterFormInput> = (data) => {
+        dispatch(setUser(data))
+        navigate("/sign-in")
         reset()
     }
 
@@ -37,27 +61,37 @@ const RegisterForm = () => {
                                    message: 'Please enter a valid email',
                                },
                            })}/>
-                    {errors.email? <span>{errors.email?.message}</span> : null}
+                    {errors.email ? <span>{errors.email?.message}</span> : null}
                 </div>
                 <div className={s.password}>
-                    <input placeholder="Password" {...register("password", {
-                        minLength: {
-                            value: 4,
-                            message: passwordErrorMessage
-                        },
-                        maxLength: {
-                            value: 10,
-                            message: passwordErrorMessage
-                        },
-                        required: "Field is required!", pattern: {
-                            value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/,
-                            message: passwordErrorMessage
-                        },
-                    })}/>
-                    {errors.password? <span>{errors.password?.message}</span> : null}
+                    <div className={s.password_input}>
+                        <input placeholder="Password" type={showPassword ? "text" : "password"} {...register("password", {
+                            minLength: {
+                                value: 4,
+                                message: passwordErrorMessage
+                            },
+                            maxLength: {
+                                value: 10,
+                                message: passwordErrorMessage
+                            },
+                            required: "Field is required!", pattern: {
+                                value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/,
+                                message: passwordErrorMessage
+                            },
+                        })}/>
+                        <div onClick={() => setShowPassword(!showPassword)}><VisibilityIcon fontSize="large"/></div>
+                    </div>
+                    {errors.password ? <span>{errors.password?.message}</span> : null}
                 </div>
                 <div className={s.password}>
-                    <input placeholder="Confirm password" {...register("confirm", {required: true})}/>
+                    <div className={s.password_input}>
+                        <input placeholder="Confirm password" type={showConfirmPassword ? "text" : "password"} {...register("confirm", {
+                            required: "Field is required!",
+                            onChange: e => setConfirmValue(e.target.value)
+                        })}/>
+                        <div onClick={() => setShowConfirmPassword(!showConfirmPassword)}><VisibilityIcon fontSize="large"/></div>
+                    </div>
+                    {confirmInvalid ? <span>{"Passwords do not match"}</span> : null}
                 </div>
                 <button disabled={!isValid}>Sign up <LoginIcon/></button>
                 <span>Do you have an account? <NavLink to="/sign-in">Sign in</NavLink></span>

@@ -1,22 +1,37 @@
-import React from "react";
+import React, {useState} from "react";
 import s from "../../pages/LoginPage/LoginPage.module.scss";
 import logo from "../../assets/img/martz-logo.png";
 import LoginIcon from "@mui/icons-material/Login";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {login} from "../../redux/Slices/userSlice";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
-interface IFormInput {
+export interface ILoginFormInput {
     email: string
     password: string
 }
 
 const LoginForm = () => {
+    const [incorrectError, setIncorrectError] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
 
-    const {handleSubmit, register, formState: {errors, isValid}, reset} = useForm<IFormInput>({mode: "onBlur"})
+    const {handleSubmit, register, formState: {errors, isValid}, reset} = useForm<ILoginFormInput>({mode: "onBlur"})
+    const userData = useAppSelector(state => state.user)
 
-    const onSubmit: SubmitHandler<IFormInput> = data => {
-        console.log(data)
-        reset()
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+
+    const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
+        if ((userData.email === data.email) || (userData.password === data.password)) {
+            setIncorrectError(false)
+            dispatch(login(true))
+            reset()
+            navigate("/")
+        } else {
+            setIncorrectError(true)
+        }
     }
 
     return (
@@ -33,12 +48,25 @@ const LoginForm = () => {
                                    value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,30}$/,
                                    message: 'Please enter a valid email',
                                },
-                           })}/>
-                    {errors.email? <span>{errors.email.message}</span> : null}
+                               onChange: () => setIncorrectError(false)
+                           })}
+                           className={errors.email || incorrectError ? s.error_input : ""}
+                    />
+                    {errors.email ? <span>{errors.email.message}</span> : null}
                 </div>
                 <div className={s.password}>
-                    <input placeholder="Password" type="password" {...register("password", {required: true})}/>
+                    <div className={s.password_input}>
+                        <input placeholder="Password"
+                               type={showPassword ? "text" : "password"}
+                               {...register("password", {required: "Field is required!",
+                                   onChange: () => setIncorrectError(false)
+                               })}
+                               className={errors.password || incorrectError ? s.error_input : ""}
+                        />
+                        <div onClick={() => setShowPassword(!showPassword)}><VisibilityIcon fontSize="large"/></div>
+                    </div>
                 </div>
+                {incorrectError ? <span className={s.incorrectError}>{"Your email address or password  incorrect"}</span> : null}
                 <button disabled={!isValid}>Sign in <LoginIcon/></button>
                 <span>Don`t have an account? <NavLink to="/sign-up">Sign up</NavLink></span>
             </form>

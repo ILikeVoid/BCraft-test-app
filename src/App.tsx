@@ -6,6 +6,7 @@ import RegistrationPage from "./pages/RegistrationPage/RegistrationPage";
 import {Route, Routes} from "react-router-dom";
 import ProductsPage from "./pages/ProductsPage/ProductsPage";
 import Layout from "./components/Layout";
+import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
                     </Route>
                     <Route path="/sign-in" element={<LoginPage/>}/>
                     <Route path="/sign-up" element={<RegistrationPage/>}/>
+                    <Route path="/reset-password" element={<ResetPasswordPage/>}/>
                 </Routes>
             </div>
         </div>
