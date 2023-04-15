@@ -1,12 +1,16 @@
 import {configureStore} from "@reduxjs/toolkit";
 import gamesReducer from "./Slices/gamesSlice";
 import userReducer from "./Slices/userSlice";
+import teamsReducer from "./Slices/teamsSlice"
+import inputsReducer from "./Slices/inputsSlice";
 
 
 const store = configureStore({
         reducer: {
             user: userReducer,
             games: gamesReducer,
+            teams: teamsReducer,
+            inputs: inputsReducer
         }
     }
 )

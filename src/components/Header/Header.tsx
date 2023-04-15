@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import s from "./Header.module.scss"
 import logo from "../../assets/img/martz-logo.png"
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import LoginIcon from '@mui/icons-material/Login';
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -20,6 +20,7 @@ const Header = () => {
     const userData = useAppSelector(state => state.user)
 
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     const handleLogoutClick = () => {
         dispatch(logout())
@@ -31,7 +32,7 @@ const Header = () => {
         <div className={s.header}>
             <div className="container">
                 <div className={s.title}>
-                    <img src={logo} alt="logo"/>
+                    <img src={logo} alt="logo" onClick={() => navigate("/")}/>
                     <div className={s.account}>
                         {userData.isAuth
                             ? <div className={s.account_info}>
@@ -58,10 +59,8 @@ const Header = () => {
                 </div>
                 <div className={s.options}>
                     <div className={s.nav}>
-                        <NavLink to="wow">World of Warcraft</NavLink>
-                        <NavLink to="diablo">Diablo</NavLink>
-                        <NavLink to="starcraft">StarCraft</NavLink>
-                        <NavLink to="warcraft">WarCraft3</NavLink>
+                        <NavLink to="games">Games</NavLink>
+                        <NavLink to="teams">Teams</NavLink>
                     </div>
                     <div className={s.search}>
                         <SearchIcon fontSize="large" cursor="pointer"/>

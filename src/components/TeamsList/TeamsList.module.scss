@@ -1,0 +1,48 @@
+.teams {
+  display: block;
+  background: #ffffff10;
+  cursor: pointer;
+  transition: 0.5s;
+
+  .title {
+    font-family: 'Roboto', sans-serif;
+    transition: 0.3s;
+    color: white;
+    font-size: 20px;
+  }
+
+  .img_block {
+    height: 115px;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 20px;
+
+    img {
+      width: 100%;
+      overflow: hidden;
+      transition: 1s;
+    }
+  }
+
+  .rating {
+    color: silver;
+    margin-bottom: 20px;
+  }
+
+  span {
+    text-align: center;
+    display: block;
+  }
+
+  &:hover {
+    background: #ffffff20;
+    img {
+      transition: 0.5s;
+      transform: scale(1.1)
+    }
+
+    .title {
+      text-decoration: underline;
+    }
+  }
+}

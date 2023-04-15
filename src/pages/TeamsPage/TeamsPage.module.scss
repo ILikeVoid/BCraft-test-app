@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+.teams {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+
+  .team {
+    span {
+      cursor: pointer;
+      font-family: 'Roboto', sans-serif;
+      color: white;
+      transition: 0.3s;
+
+      &:hover {
+        color: silver;
+        text-decoration: underline;
+      }
+    }
+  }
+}

@@ -12,14 +12,16 @@ export type IGamesState = {
 interface IState {
     loading: boolean,
     games: IGamesState[],
+    gameDetails: IGamesState | null
 }
 
 const initialState: IState = {
     loading: false,
-    games: []
+    games: [],
+    gameDetails: null
 }
 
-export const getGamesThunk = createAsyncThunk<IGamesState[], undefined, {rejectValue: string}>(
+export const getGamesThunk = createAsyncThunk<Array<IGamesState>, undefined, {rejectValue: string}>(
     'getGamesThunk',
     async (_, {rejectWithValue}) => {
         try {
@@ -27,6 +29,19 @@ export const getGamesThunk = createAsyncThunk<IGamesState[], undefined, {rejectV
             return response.data
         } catch (e) {
             return rejectWithValue('Не удалось получить список игр')
+        }
+    }
+)
+
+export const getGameDetailsThunk = createAsyncThunk<IGamesState, number, {rejectValue: string}>(
+    'getGameDetailsThunk',
+    async (gameId, {rejectWithValue}) => {
+        try {
+            console.log(gameId)
+            const response = await gamesApi.getGameDetails(gameId)
+            return response.data
+        } catch (e) {
+            return rejectWithValue('Не удалось получить детали игры')
         }
     }
 )
@@ -47,6 +62,16 @@ export const gamesSlice = createSlice({
             state.loading = false
         })
         builder.addCase(getGamesThunk.rejected, (state) => {
+            state.loading = false
+        })
+        builder.addCase(getGameDetailsThunk.pending, (state) => {
+            state.loading = true
+        })
+        builder.addCase(getGameDetailsThunk.fulfilled, (state, action) => {
+            state.gameDetails = action.payload
+            state.loading = false
+        })
+        builder.addCase(getGameDetailsThunk.rejected, (state) => {
             state.loading = false
         })
     }

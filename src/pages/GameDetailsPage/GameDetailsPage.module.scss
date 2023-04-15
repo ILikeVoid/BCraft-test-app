@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+.game_details {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+
+  .title {
+    display: flex;
+    color: white;
+    gap: 40px;
+
+    .info {
+      .name {
+        font-size: 46px;
+      }
+
+      .description {
+        font-size: 26px;
+        color: silver;
+      }
+
+      span {
+        display: block;
+      }
+    }
+
+    img {
+      width: 300px;
+      height: 300px;
+    }
+  }
+
+  span {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  .developer {
+    color: gray;
+  }
+}

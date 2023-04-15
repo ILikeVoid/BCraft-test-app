@@ -23,6 +23,15 @@
     padding: 40px 40px;
     gap: 50px;
 
+    .home {
+      cursor: pointer;
+      color: white;
+
+      &:hover {
+        color: silver;
+      }
+    }
+
     .logo {
       display: flex;
       flex-direction: column;

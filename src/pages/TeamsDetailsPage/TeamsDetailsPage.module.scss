@@ -1,0 +1,45 @@
+.team_details {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+
+  .title {
+    display: flex;
+    color: white;
+    gap: 40px;
+
+    .info {
+      .name {
+        font-size: 46px;
+      }
+
+      .wins {
+        font-size: 26px;
+        color: green;
+      }
+
+      .losses {
+        font-size: 26px;
+        color: red;
+      }
+
+      .rating {
+        margin-top: 20px;
+        font-size: 30px;
+        color: silver;
+      }
+
+      span {
+        display: block;
+      }
+    }
+
+    img {
+      width: 500px;
+    }
+  }
+
+  span {
+    font-family: 'Roboto', sans-serif;
+  }
+}
