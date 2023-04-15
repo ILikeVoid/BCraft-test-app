@@ -44,7 +44,7 @@ const LoginForm = () => {
 
 
     const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
-        if ((userData.email === data.email) || (userData.password === data.password)) {
+        if ((userData.email === data.email) && (userData.password === data.password)) {
             setIncorrectError(false)
             dispatch(login(true))
             reset()
